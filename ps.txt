@@ -19,3 +19,30 @@ $reader.GetDecimal(0).ToString() + ', ' + $reader.GetString(1)
 $connection.Close()
 
 #$Error[0] | fl -Force 
+
+---------------------------------------------------------------------------------------------------------------------------
+add-type -Path "C:\Windows\Microsoft.NET\assembly\GAC_MSIL\Oracle.ManagedDataAccess\v4.0_4.121.2.0__89b483f429c47342\Oracle.ManagedDataAccess.dll"
+
+$connectionstring =“Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=orclpdb)));User Id=hr; Password=hr“
+
+$OraConn = New-Object Oracle.ManagedDataAccess.Client.OracleConnection($connectionstring)
+$OraCmd = New-Object Oracle.ManagedDataAccess.Client.OracleCommand
+$OraCmd.FetchSize = $OraCmd.FetchSize * 64
+$OraCmd.Connection = $OraConn
+$OraCmd.CommandText = "SELECT EMPLOYEE_ID,FIRST_NAME FROM EMPLOYEES ORDER BY EMPLOYEE_ID"
+$OraConn.Open()
+
+$reader=$OraCmd.ExecuteReader()
+
+while ($reader.Read()) {
+$reader.GetDecimal(0).ToString() + ', ' + $reader.GetString(1)
+}
+
+#$OraAdap = New-Object Oracle.ManagedDataAccess.Client.OracleDataAdapter($oraCmd)
+#$DataTable = New-object "System.Data.DataTable"
+#$OraAdap.Fill($DataTable) | Out-Null
+#$results = $DataTable | Select $DataTable.Columns.ColumnName
+$oraConn.Close()
+Pause
+
+-------------------------------------------------------------------------------------------------------------------
