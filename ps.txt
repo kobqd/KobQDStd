@@ -1,0 +1,21 @@
+add-type -AssemblyName System.Data.OracleClient
+
+$username = "hr"
+$password = "hr"
+$data_source = "orclpdb"
+$connection_string="User Id=$username;Password=$password;Data Source=$data_source"
+
+$connection = New-Object System.Data.OracleClient.OracleConnection($connection_string)
+$queryString="SELECT EMPLOYEE_ID,FIRST_NAME FROM HR.EMPLOYEES ORDER BY EMPLOYEE_ID"
+$command = new-Object System.Data.OracleClient.OracleCommand($queryString, $connection)
+
+$connection.Open()
+$command.CommandText=$queryString
+$reader=$command.ExecuteReader()
+
+while ($reader.Read()) {
+$reader.GetDecimal(0).ToString() + ', ' + $reader.GetString(1)
+}
+$connection.Close()
+
+#$Error[0] | fl -Force 
