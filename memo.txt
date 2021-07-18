@@ -1,0 +1,6 @@
+ useEffect(() => {
+      axios.get('https://localhost:44368/api/expense').then(response => {
+          console.log(response)
+          setExpensesList(response.data)
+      })
+  }, [])
