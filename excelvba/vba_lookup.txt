@@ -1,0 +1,55 @@
+Sub TestVBA()
+    OptimizeVBA True
+    Dim startTime As Single, endTime As Single
+    startTime = Timer
+    
+    Dim names As Range, ages As Range
+    Dim lookupNames As Range, lookupAges As Range
+    Dim vlookupCol As Object
+    
+    Set names = ShTestLookUp.Range("A2:A7")
+    Set ages = ShTestLookUp.Range("B2:B7")
+    Set lookupNames = ShTestLookUp.Range("D2:D7")
+    Set lookupAges = ShTestLookUp.Range("E2:E7")
+    
+    'Build Collection
+    Set vlookupCol = BuildLookupCollection(names, ages)
+    
+    'Lookup the values
+    VLookupValues lookupNames, lookupAges, vlookupCol
+    endTime = Timer
+    Debug.Print (endTime - startTime) & " seconds have passed [VBA]"
+    OptimizeVBA False
+    Set vlookupCol = Nothing
+End Sub
+ 
+Function BuildLookupCollection(categories As Range, values As Range)
+    Dim vlookupCol As Object, i As Long
+    Set vlookupCol = CreateObject("Scripting.Dictionary")
+    For i = 1 To categories.Rows.Count
+        Call vlookupCol.Add(CStr(categories(i)), values(i))
+    Next i
+    
+    Set BuildLookupCollection = vlookupCol
+End Function
+ 
+Sub VLookupValues(lookupCategory As Range, lookupValues As Range, vlookupCol As Object)
+    Dim i As Long, resArr() As Variant
+    ReDim resArr(lookupCategory.Rows.Count, 1)
+    For i = 1 To lookupCategory.Rows.Count
+        If vlookupCol.Exists(CStr(lookupCategory(i))) Then
+            resArr(i - 1, 0) = vlookupCol.Item(CStr(lookupCategory(i)))
+        Else
+            resArr(i - 1, 0) = "–³"
+        End If
+        'resArr(i - 1, 0) = vlookupCol.Item(CStr(lookupCategory(i)))
+    Next i
+    lookupValues = resArr
+End Sub
+ 
+Sub OptimizeVBA(isOn As Boolean)
+    Application.Calculation = IIf(isOn, xlCalculationManual, xlCalculationAutomatic)
+    Application.EnableEvents = Not (isOn)
+    Application.ScreenUpdating = Not (isOn)
+    ActiveSheet.DisplayPageBreaks = Not (isOn)
+End Sub
