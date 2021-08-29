@@ -1,0 +1,25 @@
+--------------ONLY NUMBER--------------
+
+= Text.Select( [Column], {"0".."9"} )
+= Table.TransformColumns( #"PreviousStepName" , {{"Column", each Text.Select( _ , {"0".."9","-","."} ) }} )
+
+Fx:
+(source) => 
+let
+    NumbersOnly = (char) => if Character.ToNumber(char) >=48 and Character.ToNumber(char) < 58 then char else "",
+    Len = Text.Length(source),
+    Acc = List.Accumulate(
+                   List.Generate( () => 0, each _ < Len, each _ + 1), 
+                   "", 
+                   (acc, index) => acc& NumbersOnly(Text.At(source, index))
+               ),
+    AsNumber = Number.FromText(Acc)
+in
+    AsNumber
+
+Use:
+let
+    Source = Table.FromRecords({[text="A-123"], [text="456"], [text="7-X89"]}),
+    Result = Table.AddColumn(Source, "Values", each NumbersOnly([text]), Int64.Type)
+in
+    Result

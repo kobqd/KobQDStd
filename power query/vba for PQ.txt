@@ -1,0 +1,50 @@
+----------------------------------------------
+Function LoadTextFile(FullFileName As String) As String
+  With CreateObject("Scripting.FileSystemObject")
+    LoadTextFile = .OpenTextFile(FullFileName, 1).readall
+  End With 
+End Function
+----------------------------------------------
+    ' create the M script to read the M file that will do the import
+        M_Script = LoadTextFile(M_Source)
+
+    ' insert the path
+        M_Script = Replace(M_Script, "PATH_AND_NAME", """" & qSource & """") 
+
+    ' insert the worksheet name
+        If wksName <> "" Then M_Script = Replace(M_Script, "SHEET_NAME", """" & wksName & """")
+
+
+----------------------------------------------
+Dim qry As WorkbookQuery
+
+If DoesQueryExist(qName) Then 
+    ' Deleting the query 
+    Set qry = ThisWorkbook.Queries(qName) 
+    qry.Delete 
+End If 
+
+Set qry = w.queries.Add(qName, M_Script, qSource)
+
+' We check if data should be loaded to Data Model 
+shouldLoadToDataModel = ThisWorkbook.Worksheets(1).Cells(13, "D") 
+
+' We check if data should be loaded to worksheet 
+shouldLoadToWorksheet = ThisWorkbook.Worksheets(1).Cells(13, "E") 
+
+If shouldLoadToWorksheet Then 
+    ' We add a new worksheet with the same name as the Power Query query 
+    Set currentSheet = Sheets.Add(After:=ActiveSheet) 
+    currentSheet.Name = qName 
+
+    If Not shouldLoadToDataModel Then 
+        ' Let's load to worksheet only 
+        LoadToWorksheetOnly qry, currentSheet 
+    Else 
+        ' Let's load to worksheet and Data Model 
+        LoadToWorksheetAndModel qry, currentSheet 
+    End If 
+ElseIf shouldLoadToDataModel Then 
+    ' No need to load to worksheet, only Data Model 
+    LoadToDataModel qry 
+End If 
