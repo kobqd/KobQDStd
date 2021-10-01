@@ -1,0 +1,12 @@
+-----------------------------------------------------------------------------
+	Replace char with new line
+-----------------------------------------------------------------------------
+SELECT A.*
+-- '@'>=6 -> '@'=6
+,REGEXP_REPLACE(a.TEXTSTR,'@{6,}','@@@@@@') aa
+-- '@@' -> newline code
+,REPLACE(REGEXP_REPLACE(a.TEXTSTR,'@{6,}','@@@@@@'),'@@',CHR(10)||CHR(13)) bb
+-- Remove new line code by translate
+,TRANSLATE(REPLACE(REGEXP_REPLACE(a.TEXTSTR,'@{6,}','@@@@@@'),'@@',CHR(10)||CHR(13)), 'x'||CHR(10)||CHR(13), 'x') cc
+FROM hr.TESTSTRING A
+--WHERE REGEXP_LIKE (a.TEXTSTR, '@{6,}');
