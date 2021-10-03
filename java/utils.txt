@@ -1,0 +1,7 @@
+javac -d output_directory -cp . com/test/Hello
+javac -cp . com/test/*.java
+
+java -cp . com.myprogram.MyProgram
+G:\DevProgram\Java\Tuhoc\Adventure\src>java -cp . com.kobqd.Main
+
+C:\mywork> jar cvfe Craps.jar Craps *.class
