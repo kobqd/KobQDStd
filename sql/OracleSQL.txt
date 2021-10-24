@@ -10,3 +10,347 @@ SELECT A.*
 ,TRANSLATE(REPLACE(REGEXP_REPLACE(a.TEXTSTR,'@{6,}','@@@@@@'),'@@',CHR(10)||CHR(13)), 'x'||CHR(10)||CHR(13), 'x') cc
 FROM hr.TESTSTRING A
 --WHERE REGEXP_LIKE (a.TEXTSTR, '@{6,}');
+
+---------------------------------
+ Group by rollup
+---------------------------------
+select
+lv_family_code,
+lv_name,
+count(*),
+grouping(lv_family_code) is_family_grp,
+grouping(lv_name) is_name_grp
+from launch
+join launch_vehicle
+on launch.lv_id = launch_vehicle.lv_id
+where launch_category in ('orbital', 'deep space')
+group by rollup(lv_family_code, lv_name)
+order by 1,2,3
+
+
+---------------------------------
+ keep dense_rank
+---------------------------------
+select
+lv_family_code,
+min(launch.apogee) keep
+(dense_rank last order by launch_date) first_apogee,
+min(launch.apogee) min_apogee,
+max(launch.apogee) max_apogee
+from launch
+join launch_vehicle
+on launch.lv_id = launch_vehicle.lv_id
+where launch.apogee is not null
+group by lv_family_code
+order by lv_family_code
+
+---------------------------------
+ rank
+---------------------------------
+--Most popular launch vehicle families.
+select
+launch_category category
+,lv_family_code family
+,count
+,rank() over (order by count desc) rank_total
+,dense_rank() over (partition by launch_category
+order by count desc) rank_per_category1
+,rank() over (partition by launch_category
+order by count desc) rank_per_category2
+from
+(
+--Launch counts per category and family.
+select launch_category, lv_family_code, count(*) count
+from launch
+join launch_vehicle
+on launch.lv_id = launch_vehicle.lv_id
+group by launch_category, lv_family_code
+order by count(*) desc
+)
+order by  launch_category desc,count desc
+
+---------------------------------
+ lag(previous),lead(next)
+---------------------------------
+select
+	to_char(launch_date, 'YYYY-MM-DD') launch_date,
+	flight_id2 spacecraft,
+	lv_family_code family,
+	trunc(launch_date) - lag(trunc(launch_date)) over
+	(partition by lv_family_code
+		order by launch_date) days_between,
+	trunc(launch_date) - lead(trunc(launch_date)) over
+		(partition by lv_family_code
+		order by launch_date) days_between2,
+	count(*) over
+		(partition by lv_family_code
+		order by launch_date) running_total
+from launch
+join launch_vehicle
+on launch.lv_id = launch_vehicle.lv_id
+where launch_category = 'deep space'
+order by launch.launch_date
+
+---------------------------------
+ Split a comma-separated string into its elements.
+---------------------------------
+select regexp_substr(csv, '[^,]', 1, level) element
+from
+(
+select 'a,b,c' csv
+from dual
+)
+connect by level <= regexp_count(csv, ',') + 1;
+
+---------------------------------
+ LAUNCH table as it looked 10 minutes ago
+---------------------------------
+select *
+from launch as of timestamp systimestamp - interval '10' minute;
+
+---------------------------------
+ Sample
+---------------------------------
+--Sample query that returns a different number each time.
+select count(*) from launch sample (1);
+--Sample query that returns the same number each time.
+select count(*) from launch sample (1) seed (1234);
+
+---------------------------------
+ PLSQL, WITH FUNCTION
+---------------------------------
+--Launches with a numeric FLIGHT_ID1.
+with function is_number(p_string in varchar2) return varchar2 is
+v_number number;
+begin
+v_number := to_number(p_string);
+return 'Y';
+exception
+when value_error then return 'N';
+end;
+
+select
+to_char(launch_date, 'YYYY-MM-DD') launch_date,
+flight_id1
+from launch
+where flight_id1 is not null
+and is_number(flight_id1) = 'Y'
+order by 1,2;
+
+---------------------------------
+ XML
+---------------------------------
+--Convert to XMLType and convert back to CLOB.
+select table_reference.xml_column.getClobVal()
+from
+(
+select xmltype('<a></a>') xml_column
+from dual
+) table_reference;
+
+--Create XML file for launch data.
+select dbms_xmlgen.getxml('
+select launch_id, launch_date, launch_category
+from launch
+where launch_tag = ''1957 ALP''
+')
+from dual;
+
+--Create a single XML file for launch data.
+create table launch_xml as
+select xmltype(dbms_xmlgen.getxml('select * from launch')) xml
+from dual;
+
+--query using LAUNCH_XML table.
+select launch_id,launch_category,launch_tag
+from launch_xml
+cross join xmltable(
+'/ROWSET/ROW'
+passing launch_xml.xml
+columns
+launch_id number path 'LAUNCH_ID',
+launch_category varchar2(31) path 'LAUNCH_CATEGORY',
+launch_tag varchar2(31) path 'LAUNCH_TAG'
+)
+
+---------------------------------
+ XML Programming
+---------------------------------
+--XQuery FLWOR row generator.*********
+select *
+from xmltable
+(
+'for $i in xs:integer($i) to xs:integer($j) return $i'
+passing 1 as "i", 3 as "j"
+columns val number path '.'
+)
+
+---------------------------------
+ XMLAGG (replace for listagg)
+---------------------------------
+SELECT col1,
+RTRIM(XMLAGG(XMLELEMENT(e,col2,'|').EXTRACT('//text()')).GetClobVal(),'|') AS list
+FROM table
+GROUP BY 
+col1;
+
+---------------------------------
+ JSON
+---------------------------------
+--Simple JSON example.
+select json_object('string' value 'a', 'array' value json_array(1,2))
+from dual;
+
+--Create table to hold JSON launch data.
+create table launch_json
+(
+launch_id number,
+json clob,
+constraint launch_json_pk primary key(launch_id),
+constraint launch_json_ck check (json is json)
+);
+
+--Populate LAUNCH_JSON with some of the LAUNCH data.
+insert into launch_json
+select
+launch_id,
+json_object
+(
+	'launch_date' value to_char(launch_date, 'YYYY-MM-DD'),
+	'flight_ids' value json_array(flight_id1, flight_id2)
+) json
+from launch
+where launch_category in ('orbital', 'deep space');
+commit;
+
+--View JSON data in LAUNCH_JSON.
+select to_char(json) launch_data
+from launch_json
+order by launch_id;
+
+--Simple JSON query on table LAUNCH_JSON.
+select
+launch_id,
+substr(launch_json.json.launch_date, 1, 10) launch_date,
+launch_json.json.flight_ids[0] flight_id1,
+launch_json.json.flight_ids[1] flight_id2,
+launch_json.json.flight_ids[2] flight_id3
+from launch_json launch_json
+order by launch_date;
+
+---------------------------------
+ UNISTR
+---------------------------------
+--Store unicode characters in a text file of any encoding.
+select unistr('A\00e9ro-Club de France') org_utf8_name
+from dual;
+ORG_UTF8_NAME
+-------------------
+Aéro-Club de France
+
+
+---------------------------------
+ INSERT ALL
+---------------------------------
+INSERT ALL
+    WHEN condition1 THEN
+        INTO table_1 (column_list ) VALUES (value_list)
+    WHEN condition2 THEN 
+        INTO table_2(column_list ) VALUES (value_list)
+    ELSE
+        INTO table_3(column_list ) VALUES (value_list)
+select * from dual;
+
+
+---------------------------------
+ MERGE
+---------------------------------
+merge into syain a
+using (
+	select
+     	id,
+		name,
+		romaji
+		from syain_before
+	)b
+on (a.id = b.id) -- 条件
+
+-- 条件に一致する
+when matched then
+	update set
+	  romaji = 'update'
+
+-- 条件に一致しない
+when not matched then
+	insert 
+		(id,
+		 name,
+		 romaji
+		 )
+	values
+		(
+		b.id,
+		b.name,
+		'insert'
+		);
+
+---------------------------------
+ IGNORE THE DUPLICATE ROWS
+---------------------------------
+insert /*+ignore_row_on_dupkey_index(propellant,propellant_uq)*/
+2 into propellant values(-1, 'Ammonia');
+
+---------------------------------
+ ERR LOG
+---------------------------------
+--Create error logging table.
+begin
+dbms_errlog.create_error_log(dml_table_name => 'LAUNCH');
+end;
+
+--Insert into LAUNCH and log errors.
+insert into launch(launch_id, launch_tag)
+values (-1, 'A value too large for this column')
+log errors into err$_launch
+reject limit unlimited;
+
+---------------------------------
+ MATERIALIZED VIEW
+---------------------------------
+--Create materialized view logs on base tables.
+create materialized view log on satellite with rowid;
+create materialized view log on launch with rowid;
+
+--Materialized view for the condition we don't want to happen.
+create materialized view satellite_bad_epoch_mv
+refresh fast on commit as
+select satellite.orbit_epoch_date, launch.launch_date,
+satellite.rowid satellite_rowid,
+launch.rowid launch_rowid
+from satellite, launch
+where satellite.launch_id = launch.launch_id
+and orbit_epoch_date < launch.launch_date - 1;
+
+---------------------------------
+ DATABASE LINK
+---------------------------------
+--Create a database link to the same database, for testing.
+create database link myself
+connect to my_user_name
+identified by "my_password"
+using '(description=(address=(protocol=tcp)(host=localhost)
+(port=1521))(connect_data=(server=dedicated)(sid=orcl)))';
+
+select * from dual@myself;
+
+---------------------------------
+ EXPLAIN PLAN
+---------------------------------
+--All satellites and their launch.
+explain plan for
+select *
+from satellite
+left join launch
+on satellite.launch_id = launch.launch_id;
+
+select * from table(dbms_xplan.display);
