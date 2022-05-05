@@ -1,0 +1,15 @@
+---------------- Get random value ----------------------
+const getRandomValue = (min, max) => {
+    return Math.floor(Math.random() * (max-min)) + min
+}
+------------------array---------------
+list:[]
+list.push('a')     -> them vao cuoi
+list.unshift('a')  -> them vao dau
+list.splice(index) -> remove item at index position
+
+--------------------
+new Date().toISOString() -> create id
+
+--------test number--------
+/^\d+$/.test(number) --> return boolean
