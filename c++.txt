@@ -1,0 +1,179 @@
+----install----
+trinh bien dich: https://www.mingw-w64.org/ --> download MingW-W64-builds
+https://sourceforge.net/projects/mingw-w64/files/ --> x86_64-8.1.0-release-posix-seh-rt_v6-rev0
+add enviroment to 'bin' folder
+
+check : cmd -> g++ --version
+
+ide: codelite.org
+
+--in codelite
+project create:
+debugger: GNU gdb debugger (for windows)
+build system: Default
+
+project setting:
+Compiler :C++ compiler option -> Enable C++17 features
+Linker: LinkOptions -> `-static`
+--in vscode
+g++ -g HelloWorld.cpp -o HelloWorld.exe
+
+--cmd
+g++ -Wall -std=c++17 main.cpp -o main.exe
+
+------------------------------------------
+#include <iostream>
+
+int main() {
+	std::cout << "Hello World" << std::endl;     -- output
+            std::cin >> variable_name;                                   -- user input
+	return 0;
+}
+
+--- combine
+std::cout << "No really!! " << favorite_number << " is my favorite number!" << std::endl;
+
+-- \n  --linebreak
+cout << "Hello\n" << " World!\n";
+
+-- multi input (separated by space)
+  cin >> num1 >> num2;
+  cout << "You entered: " << num1 << " and " << num2 << endl;
+
+--sizeof
+sizeof(int)  sizeof(variable name)   --> return bytes
+INT_MIN INT_MAX --> min and max value of integer type
+
+-----------
+\n: new line     \r: return    \t: tab    \\: backslash
+\b: backspace    \': single quote    :": double quote
+
+--CONSTANT
+const int age {12};
+#define pi 3.1415926      --> dont use defined constants in Modern C++
+
+-- array
+int arrName [3] {1,2,3};
+int arrName [] {1,2,3};
+
+-- vector
+#include <vector>
+vector <int> vectorName(5); --> contains 5 int elements
+vector <int> vectorName {1,3,5,7,9};
+
+vectorName.at(index);  -- exp: vectorName.at(1); --> 3
+vectorName.pushback(11); --> 1,3,5,7,9,11
+vectorName.size() -> return vector size
+
+-- 2d vector
+vector<vector<int>> vName {
+ {1,2,3,4},
+ {1,2,4,4},
+ {1,2,8,6}
+}
+vName[0][0];
+vName.at(0).at(0);
+
+-- CAST--
+static_cast<type>(variableName);
+
+-- bool--
+cout << boolalpha;  -> will display true/false instead of 1/0 for booleans
+
+-- string compare--
+strcmp("abc","abc") -> return 0
+
+--google test--
+-Compare string:
+ASSERT_STREQ(x,y)		EXPECT_STREQ(x,y)
+ASSERT_STRNE(x,y)		EXPECT_STRNE(x,y)
+ASSERT_STRCASEEQ(x,y)	EXPECT_STRCASEEQ(x,y)
+ASSERT_STRCASENE(x,y)	EXPECT_STRCASENE(x,y)
+
+-TestFixture
+class AccountTestFixture: public testing::Test
+{
+  public:
+    AccountTestFixture();               // 1.5
+    virtual ~AccountTestFixture();      // 3.5
+    SetUp() override;                   // 2
+    TearDown() override;                // 3
+    static void SetUpTestCase();        // 1
+    static void TearDownTestCase();     // 4
+  protected:
+    Account account;
+}
+void AccountTestFixture::SetUp()
+{
+  std::cout << "SetUp called \n";
+  account.deposit(10.5);
+}
+void AccountTestFixture::TearDown()
+{
+  std::cout << "TearDown called \n";
+}
+TEST_F(AccountTestFixture,TestDeposit)
+{
+  .....
+}
+
+
+-TestFixture Parameter
+class ValidatorFixture: public testing::TestWithParam<std::tuple<int,bool>>
+{
+  public:
+  protected:
+    Validator mValidator{5,10};
+}
+
+TEST_P(ValidatorFixture,TestInRange)
+{
+  std::tuple<int,bool> tuple = GetParam();
+  int param = std::get<0>(tupple);
+  bool expectedValue = std::get<1>(tupple);
+  
+  bool isInside = mValidator.inRange(param);
+  //ASSERT_TRUE(isInside);
+  ASSERT_EQ(expectedValue,isInside);
+}
+
+//INSTANTIATE_TEST_CASE_P(InRangeTrue,ValidatorFixture,testing::Values(5,6,7,9,10));
+INSTANTIATE_TEST_CASE_P(InRangeTrue,ValidatorFixture,testing::Values(
+  std::make_tuple<-50,false>,
+  std::make_tuple<4,false>,
+  std::make_tuple<5,true>,
+  std::make_tuple<6,true>,
+  std::make_tuple<7,true>,
+  std::make_tuple<9,true>,
+  std::make_tuple<10,true>,
+  std::make_tuple<11,false>));
+
+
+- google mock
+MOCK_METHOD(ReturnType,MethodName,(Arguments...))
+
+legacy
+Method with n parameters
+MOCK_METHODn(name,returnType(paramType1,paramType2...))
+
+  int sum(int a,int b);
+  MOCK_METHOD2(sum,int(int,int));
+  void doSomething();
+  MOCK_METHOD0(doSomething,void());
+
+-- Release Memory
+delete varName
+delete [] pa // int *pa = new int[20];     --> array
+
+------
+two demensional array flattened in array
+int arr[2][4]={{1,2,3,4},{5,6,7,8}}
+int arr[] = {1,2,3,4,5,6,7,8}}
+array[row*numcols+coln]
+
+--------
+int fncName(param1,param2){return int;}
+std::future<int> OddSum = std::async(std::launch::defered,fncName,param1,param2);
+std::future<int> OddSum = std::async(std::launch::async,fncName,param1,param2);
+OddSum.get();
+---------
