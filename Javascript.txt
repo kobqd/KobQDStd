@@ -13,3 +13,6 @@ new Date().toISOString() -> create id
 
 --------test number--------
 /^\d+$/.test(number) --> return boolean
+
+---------web component example---------------
+https://codepen.io/bradtraversy/pen/wvaXKoK
