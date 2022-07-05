@@ -16,3 +16,15 @@ new Date().toISOString() -> create id
 
 ---------web component example---------------
 https://codepen.io/bradtraversy/pen/wvaXKoK
+
+--------svg note-------------
+<svg viewBox="0 0 100 100">
+  <rect
+    x="10" y="10" width="20%" height="20" fill="red" stroke="blue"
+  />
+  <path d="M 10 30 l 0 20 l 20 0"></path>
+  <path d="M 10 60 C 20 80, 40 80, 50 60"></path>
+</svg>
+
+var shape = document.querySelector('.square');
+var shapeLength = shape.getTotalLenght();
