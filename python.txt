@@ -1,0 +1,91 @@
+--- concat -----
+a = 4
+print("{} {}".format("a =", a))
+--- get data type ----
+print(type(data))
+--- list ----
+values = [1, 2, "aa", 4, 5]
+print(values[0]) #1
+print(values[-1]) #5
+print(values[1:3]) # [2, 'aa']
+values.insert(3,"bb")
+print(values) # [1,2,aa,bb,4,5]
+values.append("End") # add to end of list
+values[2] = "aaa" # update
+del values[0] # deleting
+--- dicionary ---
+dic = {"a" : 2, 4 : "aaa", "c" : "ccc"}
+print(dic[4])
+print(dic["c"])
+
+dict2 = {}
+dict2["a"] = "aaa"
+dict2["b"] = "bbb"
+dict2["c"] = "ccc"
+print(dict2) #{'a': 'aaa', 'b': 'bbb', 'c': 'ccc'}
+--- for loop ---
+for i in range(1,5,2):
+    print(i) # 1 3
+--- class ----
+class TestClass:
+    num = 100
+    def __init__(self, a, b):
+        print("constructor 2")
+        self.num1 = a
+        self.num2 = b
+    # func
+    def getData(self):
+        print("getData")
+    def SumNum(self):
+        return self.num1 + self.num2 + self.num
+
+obj = TestClass(2,3) # constructor 2
+obj.getData()        # getData
+print(obj.num)       # 100
+print(obj.num1)      # 2
+print(obj.num2)      # 3
+print(obj.SumNum())  # 105
+----inheritance----
+from dirName.fileName import TestClass
+class ChildClass(TestClass):
+    numz = 200
+    def __init__(self):
+        TestClass.__init__(self, 2, 10)
+    def getAllData(self):
+        return  self.numz + self.SumNum()
+obj = ChildClass()
+print(obj.getAllData()) # 312
+----String----
+str1 = "KobQDabcdefg.xyz"
+str2 = "concat"
+str3 = "KobQD"
+print(str1[1]) # 0
+print(str1[0:5]) # KobQD
+print(str1+str2) # KobQDabcdefg.xyzconcat
+print(str3 in str1) # True
+var = str1.split(".")
+print(var[0]) # KobQDabcdefg
+print(var[1]) # xyz
+str4 = "  test  "
+print(str4.strip()) #trim space -> "test" (left trim: lstrip, right trim: rstrip)
+----file read write---
+--read
+file = open('test.txt')
+# print(file.read(5))
+# print(file.readline())
+# print(file.readline())
+# line = file.readline()
+# while line!="":
+#     print(line)
+#     line = file.readline()
+for line in file.readlines():
+    print(line)
+file.close()
+--write
+with open('test.txt','r') as reader:
+    content = reader.readlines() # read file and store all lines in list
+    with open('test.txt','w') as writer:
+        for line in reversed(content):
+            writer.write(line)
+---------Exception------------
+raise Exception("item count not matching")
