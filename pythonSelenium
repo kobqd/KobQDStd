@@ -1,0 +1,27 @@
+----- Init ---------
+from selenium import webdriver
+#firefox: geckodriver/ microsoft edge driver
+#chrome driver
+from selenium.webdriver.chrome.service import Service
+service_obj = Service("G:\DevProgram\Selenium Course\chromedriver_win32\chromedriver.exe")
+driver = webdriver.Chrome(service=service_obj)
+driver.maximize_window()
+driver.get("https://www.google.com/")
+print(driver.title)
+print(driver.current_url)
+driver.get("https://www.yahoo.co.jp/")
+# driver.minimize_window()
+driver.back()
+driver.refresh()
+driver.forward()
+driver.close()
+------ find_element --------(SelectorsHub)
+# ID, Xpath, CSSSelector, Classname, name, linkText
+driver.find_element(By.NAME,"email").send_keys("kobqd@email.com")
+#driver.find_element(By.ID,"exampleInputPassword1").send_keys("123456")
+driver.find_element(By.CSS_SELECTOR,"input[type='password']").send_keys("123456")
+driver.find_element(By.ID,"exampleCheck1").click()
+messsage = driver.find_element(By.CLASS_NAME,"alert-success").text
+print(messsage)
+assert "Success" in messsage
+element.clear()
