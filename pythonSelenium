@@ -25,3 +25,24 @@ messsage = driver.find_element(By.CLASS_NAME,"alert-success").text
 print(messsage)
 assert "Success" in messsage
 element.clear()
+----dropdown----
+dropdown = Select(driver.find_element(By.ID,"exampleFormControlSelect1"))
+dropdown.select_by_visible_text("Female")
+dropdown.select_by_index(0)
+---ect---
+time.sleep(2)
+list = driver.find_elements(By.CSS_SELECTOR,"div")
+len(list)
+checkbox.is_selected()
+el.is_displayed()
+----alert----
+driver.find_element(By.ID,'name').send_keys("KobQD")
+driver.find_element(By.ID,'alertbtn').click()
+alert = driver.switch_to.alert
+print(alert.text)
+alert.accept()
+#alert.dismiss()
+----wait----
+1 globally. driver.implicitly_wait(5)
+2. wait = WebDriverWait(driver,10)
+   wait.until(expected_conditions.presence_of_element_located((By.Id,"zzz"))) 
