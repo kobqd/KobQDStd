@@ -73,3 +73,5 @@ pip install pytest-html
 py.test --html=report.html
 https://pytest-html.readthedocs.io/en/latest/user_guide.html
 pytest --html=report.html --capture=tee-sys
+--- excel---
+pip install openpyxl
