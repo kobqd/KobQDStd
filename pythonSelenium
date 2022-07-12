@@ -55,3 +55,21 @@ chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("headless")
 chrome_options.add_argument("--ignore-certificate-errors")
 driver = webdriver.Chrome(service=service_obj,options=chrome_options)
+---switch back---
+driver.switch_to.default_content()
+--- pytest----
+pip install pytest
+# pytest file start with test_ or end with _test
+# pytest method name start with test
+# code wrapped in method only
+def test_firstProgram():
+    msg = "Hello"
+    assert msg == "Hi", "Test failed because string do not match"
+    
+-v:verbose / -s:console log / -k methodName: khong can giong ten toan phan
+cmd: py.test -v -s
+---pytest html report ----
+pip install pytest-html
+py.test --html=report.html
+https://pytest-html.readthedocs.io/en/latest/user_guide.html
+pytest --html=report.html --capture=tee-sys
