@@ -1,0 +1,14 @@
+npm init -y
+npm i webpack webpack-cli --save-dev
+npm i css-loader style-loader --save-dev
+npx webpack
+npx webpack --stats detailed
+
+webpack.config.js
+https://github.com/vp-online-courses/webpack-tutorial
+---asset---
+4 types
+- asset/resource
+- asset/inline
+- asset
+- asset/source
