@@ -3,6 +3,9 @@ npm i webpack webpack-cli --save-dev
 npm i css-loader style-loader --save-dev
 npm i sass-loader sass --save-dev
 npm install @babel/core babel-loader @babel/preset-env @babel/plugin-proposal-class-properties --save-dev
+npm install mini-css-extract-plugin --save-dev
+npm install clean-webpack-plugin --save-dev
+npm install html-webpack-plugin --save-dev
 npx webpack
 npx webpack --stats detailed
 
