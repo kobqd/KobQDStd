@@ -35,3 +35,5 @@ document.getElementById("wrap").addEventListener("scroll", function(){
    var translate = "translate(0,"+this.scrollTop+"px)";
    this.querySelector("thead").style.transform = translate;
 });
+------------drag and drop ----------
+https://htmldom.dev/drag-and-drop-table-column/
