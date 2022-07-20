@@ -30,3 +30,8 @@ var shape = document.querySelector('.square');
 var shapeLength = shape.getTotalLenght();
 ----------tbl width example--------
 https://brainbell.com/javascript/making-resizable-table-js.html
+-----header fixed----
+document.getElementById("wrap").addEventListener("scroll", function(){
+   var translate = "translate(0,"+this.scrollTop+"px)";
+   this.querySelector("thead").style.transform = translate;
+});
