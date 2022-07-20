@@ -28,3 +28,5 @@ https://codepen.io/bradtraversy/pen/wvaXKoK
 
 var shape = document.querySelector('.square');
 var shapeLength = shape.getTotalLenght();
+----------tbl width example--------
+https://brainbell.com/javascript/making-resizable-table-js.html
