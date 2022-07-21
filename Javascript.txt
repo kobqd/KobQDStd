@@ -37,3 +37,5 @@ document.getElementById("wrap").addEventListener("scroll", function(){
 });
 ------------drag and drop ----------
 https://htmldom.dev/drag-and-drop-table-column/
+-----virtual dom example---
+https://github.com/ycmjason-talks/2018-11-21-manc-web-meetup-4/tree/master/src/vdom
