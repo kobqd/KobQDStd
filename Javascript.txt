@@ -60,3 +60,14 @@ obj?.prop1?.prop2
 obj.fnc?.()
 obj.arr?.[idx]
 ----defer-----
+----pointer event------
+el.addEventListener("pointerdown",e => {
+    el.setPointerCapture(e.pointerId)
+    setPosition(e)
+    el.addEventListener("pointermove",setPosition)
+    el.addEventListener("pointerup",() => {
+        // el.releasePointerCapture(e.pointerId)
+        // el.hasPointerCapture(e.pointerId)
+        el.removeEventListener("pointermove",setPosition)
+    },{once:true})
+})
