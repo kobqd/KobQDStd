@@ -53,4 +53,10 @@ e.addEventListener(
    outline: blue solid 2px;
 }
 div:focus {outline: blue solid 2px;}
-
+------console style-------
+console.log(`%c ${a} %c$ {b}`,"font-weight:bold","color:green")
+-----optional chaining-------
+obj?.prop1?.prop2
+obj.fnc?.()
+obj.arr?.[idx]
+----defer-----
