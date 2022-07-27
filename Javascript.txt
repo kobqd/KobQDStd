@@ -71,3 +71,8 @@ el.addEventListener("pointerdown",e => {
         el.removeEventListener("pointermove",setPosition)
     },{once:true})
 })
+---- arr to obj-------
+const obj = arr.reduce((acc,word) => {acc[word]=word;return acc;},{})
+---- Regexpression---
+const regex = new RegExp('^.a.$')
+regex.test('cat')
