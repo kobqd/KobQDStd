@@ -118,3 +118,9 @@ function throttle(cb, delay=1000){
         setTimeout(timeoutFnc,delay)
     }
 }
+--------ResizeObserver------
+const observer = new ResizeObserver(entries => {console.log(entries)})
+observer.observe(element1)
+observer.observe(element2)
+--------MutationObserver------
+--------IntersectionObserver------
