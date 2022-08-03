@@ -130,3 +130,10 @@ observer.observe(parent,{
 })
 observer.disconnect()
 --------IntersectionObserver------
+---scrollbar calc----
+var arrowHeight = 25;
+var viewportHeight = 200;
+var contentHeight = 600;
+var viewableRatio = viewportHeight / contentHeight; // 1/3 or 0.333333333n
+var scrollBarArea = viewportHeight - arrowHeight * 2; // 150px
+var thumbHeight = scrollBarArea * viewableRatio; // 50px
