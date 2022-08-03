@@ -123,4 +123,10 @@ const observer = new ResizeObserver(entries => {console.log(entries)})
 observer.observe(element1)
 observer.observe(element2)
 --------MutationObserver------
+observer.observe(parent,{
+    childList:true,
+    attributes:true,attributeOldValue:true,attributeFilter:["id"],
+    subtree:true,characterData:true,characterDataOldValue:true
+})
+observer.disconnect()
 --------IntersectionObserver------
