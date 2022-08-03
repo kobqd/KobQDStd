@@ -76,3 +76,12 @@ const obj = arr.reduce((acc,word) => {acc[word]=word;return acc;},{})
 ---- Regexpression---
 const regex = new RegExp('^.a.$')
 regex.test('cat')
+------sleep--------
+const sleep = (duration) => {
+    return new Promise(resolve => {
+        setTimeout(resolve,duration)
+    })
+};
+sleep(200).then(()=>{})
+----randomNumberBetween----
+const fnc = (min,max) => {return Math.floor(Math.random()*(max-min+1)+min);};
