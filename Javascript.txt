@@ -85,3 +85,36 @@ const sleep = (duration) => {
 sleep(200).then(()=>{})
 ----randomNumberBetween----
 const fnc = (min,max) => {return Math.floor(Math.random()*(max-min+1)+min);};
+------debounce----------
+function debounce(cb,delay=1000){
+    let timeout
+    return (...args) => {
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+            cb(...args)
+        },delay)
+    }
+}
+------throttle---------
+function throttle(cb, delay=1000){
+    let shouldWait = false
+    let waitingArgs
+    const timeoutFnc = () => {
+        if(waitingArgs == null){
+            shouldWait = false
+        }else{
+            cb(...waitingArgs)
+            waitingArgs = null
+            setTimeout(timeoutFnc,delay)
+        }
+    }
+    return (...args) => {
+        if (shouldWait){
+            waitingArgs = args
+            return
+        }
+        cb(...args)
+        shouldWait = true
+        setTimeout(timeoutFnc,delay)
+    }
+}
