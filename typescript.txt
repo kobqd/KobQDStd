@@ -1,0 +1,6 @@
+npm i --save-dev typescript
+npx tsc --init
+-------conf-----
+"script":{
+  "start": "tsc --watch"
+}
