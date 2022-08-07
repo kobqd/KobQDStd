@@ -137,3 +137,19 @@ var contentHeight = 600;
 var viewableRatio = viewportHeight / contentHeight; // 1/3 or 0.333333333n
 var scrollBarArea = viewportHeight - arrowHeight * 2; // 150px
 var thumbHeight = scrollBarArea * viewableRatio; // 50px
+----web component --------------
+----slot style
+::slot(cssSelectorOnlyTop){
+}
+::slot(*){
+}
+:host
+:host-context(p){
+}
+----attr change
+attributeChangedCallback(name, oldValue, newValue){
+    console.log(name, oldValue, newValue);
+}
+static get observedAttributes(){
+    return ['text']
+}
