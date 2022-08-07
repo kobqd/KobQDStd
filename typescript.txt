@@ -15,3 +15,29 @@ type Task = {
   completed: boolean
   createAt: Date
 }
+----------
+--server
+npm i socket.io
+const io = require('socket.io')(3000,{
+  cors:{
+    origin: ['http://localhost:8080']
+  }
+})
+io.on('connection',socket => {
+  console.log('client connected')
+  socket.on('custom-event',(number,string,object)=>{
+    console.log(number,string,object)
+    io(.broadcast).emit('event2',message)
+  })
+})
+--client
+npm install --save socket.io-client
+import {io} from 'socket.io-client'
+const socket = io('http://localhost:3000')
+socket.on("connect",()=>{
+  displayMessage(socket.id)
+})
+socket.emit('custom-event',10,'Hi',{a:'a'})
+socket.on('event2',message => {
+  console.log()
+})
