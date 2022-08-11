@@ -39,12 +39,26 @@ document.getElementById("wrap").addEventListener("scroll", function(){
 https://htmldom.dev/drag-and-drop-table-column/
 -----virtual dom example---
 https://github.com/ycmjason-talks/2018-11-21-manc-web-meetup-4/tree/master/src/vdom
--------- event-----------
-e.addEventListener(
-    'click',
-    e => {e.stopPropagation()},
-    {capture: true} // {once:true}
-)
+--------Add event Listen-----------
+e.addEventListener('click',e => {
+    e.stopPropagation() // stop capture and bubble
+},{capture: true} // {once:true})
+
+document
+document capture
+grandparent capture
+parent capture
+child capture
+child bubble
+parent bubble
+grandparent bubble
+document bubble
+
+document.addEventListener('click',e => {
+    if(e.target.matches("div")){
+        console.log("zz")
+    }
+})
 -----------tabindex------------
 *[tabindex]:focus {
     outline: 2px green solid;
