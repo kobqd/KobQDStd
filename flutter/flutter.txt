@@ -1,0 +1,14 @@
+jdk8
+Android SDK Command-line Tools
+extension : flutter, material icon theme
+ios widget: cupertino
+webpage: dartpad
+---------------
+flutter doctor
+flutter create app_name
+flutter run
+flutter packages get
+
+---------------
+
+
