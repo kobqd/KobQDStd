@@ -190,6 +190,18 @@ self.addEventListener('fetch', function(event) {
       })
   );
 });
+-----------workbox---------------
+npm: workbox-cli -> "generate-sw":"workbox generate:sw",
+"swSrc":"sw-base.js" => "workbox inject:manifest"
+
+importScript('workbox-sw.prod.v...js');
+const workboxSW = new self.WorkboxSW();
+
+workboxSW.router.registerRoute(/.*(?:googleapis|gstatic)\.com.*$/,workboxSW.strategies.staleWhileRevalidate({
+  cacheName:'google-fonts'
+}));
+workboxSW.precache([]);
+
 
 
 
