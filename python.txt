@@ -98,5 +98,14 @@ with open('test.txt','r') as reader:
     print(e)
   finally:
     print("cleaning up")
+    
+------extract table in pdf data -------
+pip install tk
+pip install ghostscript
+pip install camelot-py
+
+tables = camelot.read_pdf('test.pdf',page='1')
+tables.export('out.csv',f='csv',compress=True)
+tables[0].to_csv('out.csv')
 
 
