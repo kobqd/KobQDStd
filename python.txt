@@ -108,4 +108,13 @@ tables = camelot.read_pdf('test.pdf',page='1')
 tables.export('out.csv',f='csv',compress=True)
 tables[0].to_csv('out.csv')
 
+-----pytest---------
+from pytest import mark
+
+@mark.abc
+def test_zzz():
+    assert True
+    
+pytest -m abc         => filter test with mark named as abc
+
 
