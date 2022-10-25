@@ -147,5 +147,18 @@ start_server = websockets.serve(echo,"localhost",PORT)
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
 
+----multi process shared-----
+from multiprocessing import Process, Queue
+
+def f(q):
+    q.put([42, None, 'hello'])
+
+if __name__ == '__main__':
+    q = Queue()
+    p = Process(target=f, args=(q,))
+    p.start()
+    print q.get()    # prints "[42, None, 'hello']"
+    p.join()
+
 
 
