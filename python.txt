@@ -246,7 +246,63 @@ if __name__ == "__main__":
     client.start()
     client.join()
     
-----------------
+------------run pytest inside python-------
+import pytest
+pytest.main(args)
+--
+args_str = "-k test_myfavorite"
+args = args_str.split(" ")
+pytest.main(args)
+
+-------------argument cmd-------------------
+import sys
+
+def hello(a,b):
+    print "hello and that's your sum:", a + b
+
+if __name__ == "__main__":
+    a = int(sys.argv[1])
+    b = int(sys.argv[2])
+    hello(a, b)
+
+-----pytest argument-------
+# conftest.py
+from pytest import fixture
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--name",
+        action="store"
+    )
+
+@fixture()
+def name(request):
+    return request.config.getoption("--name")
+
+-----------jinjia-------
+--py
+from jinja2 import Enviroment, FileSystemLoader, select_autoescape
+env = Enviroment(
+    loader = FileSystemLoader("templates"),
+    autoescape = select_autoescape()
+)
+context = {
+    "thing": "Hello",
+    "data":[
+        {"name": "abc", "count": 123},
+        {"name": "def", "count": 456}
+    ]
+}
+template = env.get_template("one.html")
+print(template.render(**context))
+
+--template
+{{ zzz }}
+{% for row in data %} ..{{ row.name }}..{{ row.count }}... {% endfor %}
+{% if loop.index is divisibleby 3 %} ....... {% endif %}
+{% block main_body %} ....... {% endblock %}
+{% extends "abc.html" %}
+{% include "def.html" %}
 
 
 
