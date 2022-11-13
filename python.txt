@@ -314,3 +314,8 @@ ffmpeg -f x11grab -video_size 1920x1080 -i :44 -codec:v libx264 -r 12 video.mp4
 user_prompt = "Enter a todo:"
 text = input(user_prompt)
 print(text)
+
+------py to exe-------
+pip install pyinstaller
+pyinstaller main.py --onefile
+--> dist/main.exe
