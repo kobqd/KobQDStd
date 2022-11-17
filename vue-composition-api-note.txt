@@ -1,0 +1,18 @@
+https://github.com/dannyconnell/vue-composition-api-course/blob/module-6/vue-composition-api-basics/
+vueuse.org
+
+-----RouterView keep alive---------
+<router-view v-slot="{Component}">
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
+----update v-model-----
+const props = defineProps({
+  modelValue:{
+    type: Boolean,
+    default: false
+  }
+})
+const emit = defineEmits(['update:modelValue'])
+$emit('update:modelValue',false)
