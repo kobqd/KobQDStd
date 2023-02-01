@@ -319,3 +319,37 @@ print(text)
 pip install pyinstaller
 pyinstaller main.py --onefile
 --> dist/main.exe
+
+---read html ----
+from bs4 import BeautifulSoup
+import requests
+
+url = f'https://www.google.com/'
+content = requests.get(url).text
+soup = BeautifulSoup(content, 'html.parser')
+ggtext = soup.find_all("a")
+# print(soup.prettify())
+for gga in ggtext:
+    print(gga.get_text())
+
+--- pathlib ----
+from pathlib import Path
+
+p1 = Path('directory/test.txt')
+
+p1.exists()  --> file exists check return true / false
+p1.is_file   --> is a file? true/false
+p1.name      --> test.txt
+p1.stem      --> test
+p1.suffix    --> .txt
+p1.parts     --> ["directory","test.txt"]
+
+p2 = Path('directory')
+print(list(p2.iterdir())) -> list of file in directory
+
+--File Rename
+file_paths = p2.iterdir()
+for path in file_paths:
+    new_filename = "new-" + path.stem + path.suffix
+    new_filepath = path.with_name(new_filename)
+    path.rename(new_filepath)
