@@ -1,0 +1,38 @@
+cargo help
+cargo new hello      -> create new rust project , project name: hello
+cargo run            -> run project, target/debug
+cargo run --release  -> release    , target/release
+
+
+-----scalar type----------
+integer float boolean character
+
+Integer
+ Unsigned		Signed
+	u8			  i8
+	u16			  i16
+	u32           i32
+	u64           i64
+	u128          i128
+	usize         isize
+
+Float f32 f64(default)
+Boolean true false
+Character char -> 4byte
+
+let x = 5_u16;
+let y = 3.14_f32;
+
+-----Compound Type-----
+-- Tuple
+let info: (u8, f16, i32) = (1, 3.3, 999);
+let a = info.0;   --> a = 1
+let (a, b, c) = info;   --> destructure a=1  b=3.3  c=999
+arity: how many item in the tuple -> arity = 3
+maximum arity is 12
+
+-- Array(same type)
+let info = [1, 2, 3];
+let info2 = [0; 3]  --> [0, 0, 0]
+let info: [u8; 3] = [1, 2, 3];
+info[0] --> 1

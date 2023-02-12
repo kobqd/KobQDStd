@@ -1,0 +1,12 @@
+
+1	abuse			/əˈbjuːz/			乱用
+2	accept			/əkˈsɛpt/			受け入れる、受け取る
+3	accompany		/əˈkʌmp(ə)ni/		同行する
+4	accomplish		/əˈkɒmplɪʃ/			達成する（仕事、任務を完遂する）
+5	accuse			/əˈkjuz/			訴える、非難する
+6	achieve			/əˈtʃiv/			達成する（能力や努力によって時間をかけて目標を達成）
+7	acknowledge		/əkˈnɒlɪdʒ/			認める
+8	acquire			/əˈkwaɪər/			獲得する、取得する
+9	act				/akt/				行動する
+10	adapt			/əˈdapt/			適応する
+11	adjust			/əˈdʒʌst/			調整する、補正する

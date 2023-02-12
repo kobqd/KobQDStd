@@ -1,0 +1,20 @@
+--------------------------------------
+-                   挨拶             -
+--------------------------------------
+A	How are you?
+B	I'm good                  -> Positive
+B	I'm OK                    -> Negative
+B	So So
+B	Not too bad, what's about you?
+
+A	What's up?                -> 最近どうよ？
+B	Not much
+B	Not thing special         -> 別に
+
+A	How it's going?           -> 調子どうよ？
+
+
+
+I was born in DN and raise in HCM
+
+Hope to see you soon
